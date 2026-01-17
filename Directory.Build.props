@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <!-- Central Package Management -->
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    
+    <!-- Common properties for all projects -->
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

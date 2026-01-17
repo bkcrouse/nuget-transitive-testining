@@ -1,0 +1,71 @@
+name: Build and Publish NuGet Packages
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build solution
+      run: dotnet build --configuration Release --no-restore
+    
+    - name: Run ConsumerApp Demo
+      run: dotnet run --project src/ConsumerApp/NuGetDemo.ConsumerApp/NuGetDemo.ConsumerApp.csproj --configuration Release --no-build
+    
+    - name: Pack NuGet packages
+      run: |
+        dotnet pack src/Core/NuGetDemo.Core/NuGetDemo.Core.csproj --configuration Release --no-build --output ./packages
+        dotnet pack src/Utilities/NuGetDemo.Utilities/NuGetDemo.Utilities.csproj --configuration Release --no-build --output ./packages
+        dotnet pack src/Services/NuGetDemo.Services/NuGetDemo.Services.csproj --configuration Release --no-build --output ./packages
+    
+    - name: List packages
+      run: ls -la ./packages
+    
+    - name: Upload packages as artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./packages/*.nupkg
+  
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    
+    steps:
+    - name: Download packages
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./packages
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Add GitHub Packages source
+      run: dotnet nuget add source --username ${{ github.repository_owner }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+    
+    - name: Publish to GitHub Packages
+      run: dotnet nuget push "./packages/*.nupkg" --source "github" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate

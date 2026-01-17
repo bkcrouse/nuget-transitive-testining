@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    <!-- NuGet Package Properties -->
+    <PackageId>NuGetDemo.Core</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>NuGetDemo</Authors>
+    <Company>NuGetDemo</Company>
+    <Description>Core library demonstrating NuGet transitive dependency patterns</Description>
+    <PackageProjectUrl>https://github.com/bkcrouse/nuget-transitive-testining</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bkcrouse/nuget-transitive-testining</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Example: Add Newtonsoft.Json v13.0.1 to demonstrate transitive dependencies -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+</Project>

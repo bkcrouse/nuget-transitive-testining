@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- 
+    EXAMPLE: Central Package Management (CPM)
+    
+    This file demonstrates how to use Central Package Management to
+    manage package versions across multiple projects in a solution.
+    
+    To enable CPM:
+    1. Set ManagePackageVersionsCentrally to true in Directory.Build.props
+    2. Define all package versions here
+    3. Remove Version attributes from PackageReference in project files
+    
+    Benefits:
+    - Single source of truth for package versions
+    - Consistent versions across all projects
+    - Easier to update packages globally
+    - Reduces version conflicts
+    
+    Usage:
+    Rename this file to Directory.Packages.props to enable CPM
+  -->
+  
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <!-- Define all package versions centrally -->
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    
+    <!-- Example: Additional common packages -->
+    <!-- <PackageVersion Include="Serilog" Version="3.1.1" /> -->
+    <!-- <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" /> -->
+    <!-- <PackageVersion Include="xunit" Version="2.6.6" /> -->
+  </ItemGroup>
+  
+  <!-- 
+    After enabling CPM, update project files to remove version attributes:
+    
+    Before (without CPM):
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    
+    After (with CPM):
+    <PackageReference Include="Newtonsoft.Json" />
+  -->
+</Project>

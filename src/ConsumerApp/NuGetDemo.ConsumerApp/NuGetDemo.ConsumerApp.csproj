@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Reference only Services - demonstrates transitive dependency resolution -->
+    <!-- Services brings in Utilities, which brings in Core -->
+    <!-- This also demonstrates how NuGet resolves version conflicts (highest compatible version wins) -->
+    <ProjectReference Include="../../Services/NuGetDemo.Services/NuGetDemo.Services.csproj" />
+  </ItemGroup>
+
+</Project>
